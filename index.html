@@ -3,98 +3,556 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Jolly Jellyfish Complimentarium</title>
+  <title>Therapy Session — Ducks Over New Jersey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root { --sea: #17a9c6; --deep-sea: #057698; --sand: #ffd969; --coral: #f66e66; --ink: #173b52; --purple: #8e5aa6; --white: #fffdf1; }
-    * { box-sizing: border-box; }
-    body { min-height: 100vh; margin: 0; overflow-x: hidden; color: var(--ink); font-family: Georgia, "Times New Roman", serif; background: radial-gradient(circle at 20% 20%, rgb(255 255 255 / 35%) 0 4px, transparent 5px), radial-gradient(circle at 74% 34%, rgb(255 255 255 / 28%) 0 7px, transparent 8px), linear-gradient(180deg, #42c7da 0%, var(--sea) 48%, var(--deep-sea) 100%); background-size: 75px 75px, 130px 130px, auto; }
-    .page { position: relative; display: grid; min-height: 100vh; place-items: center; padding: 32px 20px 130px; }
-    .bubble { position: absolute; border: 3px solid rgb(255 255 255 / 66%); border-radius: 50%; opacity: .8; pointer-events: none; }
-    .bubble-one { width: 54px; height: 54px; top: 11%; left: 9%; } .bubble-two { width: 29px; height: 29px; top: 19%; left: 15%; } .bubble-three { width: 72px; height: 72px; right: 8%; bottom: 18%; }
-    .content { width: min(700px, 100%); text-align: center; }
-    .eyebrow { margin: 0 0 10px; color: var(--white); font-family: "Trebuchet MS", sans-serif; font-size: .8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-    h1 { margin: 0; color: var(--sand); font-family: "Trebuchet MS", sans-serif; font-size: clamp(2.35rem, 8vw, 4.8rem); font-weight: 900; letter-spacing: 0; line-height: .9; text-shadow: 3px 4px 0 var(--coral), 6px 7px 0 rgb(21 67 88 / 28%); }
-    .subtitle { max-width: 510px; margin: 22px auto 28px; color: var(--white); font-size: clamp(1.1rem, 3vw, 1.4rem); font-style: italic; line-height: 1.4; }
-    .compliment-box { min-height: 216px; display: grid; place-items: center; padding: 30px; border: 5px solid var(--ink); border-radius: 8px; background: var(--white); box-shadow: 10px 10px 0 rgb(6 80 104 / 42%); }
-    #output { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: bold; line-height: 1.35; transition: opacity 450ms ease, transform 450ms ease; }
-    #output.fade-out { opacity: 0; transform: translateY(10px) scale(.97); }
-    .compliment-line { display: block; margin: 0 0 16px; }
-    .insult { display: block; color: #ff172f; font-family: "Trebuchet MS", sans-serif; font-size: clamp(1.45rem, 5vw, 2.15rem); line-height: 1.15; text-shadow: 0 0 10px rgb(255 23 47 / 75%); text-transform: uppercase; animation: red-alert 550ms steps(2, end) infinite; }
-    @keyframes red-alert {
-      0%, 49% { color: #ff172f; text-shadow: 0 0 14px rgb(255 23 47 / 90%); }
-      50%, 100% { color: #7b0010; text-shadow: none; }
+    :root {
+      --mob-red: #8b0000;
+      --mob-gold: #d4af37;
+      --mob-black: #1a1a1a;
+      --mob-tan: #d4c5b0;
+      --office-cream: #f4f1e8;
+      --therapy-blue: #4a5859;
     }
-    .signature { display: block; margin-top: 14px; color: var(--purple); font-family: "Trebuchet MS", sans-serif; font-size: .78rem; font-style: normal; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
-    button { width: min(390px, 100%); margin-top: 28px; padding: 17px 22px; border: 4px solid var(--ink); border-radius: 5px; color: var(--ink); cursor: pointer; font-family: "Trebuchet MS", sans-serif; font-size: 1.15rem; font-weight: 900; letter-spacing: .3px; background: var(--sand); box-shadow: 6px 6px 0 var(--coral); transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease; }
-    button:hover { background: #ffe588; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--coral); } button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--coral); } button:focus-visible { outline: 4px solid var(--white); outline-offset: 4px; }
-    .seafloor { position: absolute; right: 0; bottom: 0; left: 0; height: 105px; background: var(--sand); clip-path: polygon(0 27%, 7% 36%, 15% 20%, 24% 39%, 34% 17%, 43% 34%, 55% 16%, 67% 36%, 76% 20%, 86% 35%, 100% 14%, 100% 100%, 0 100%); }
-    .coral { position: absolute; bottom: 13px; width: 18px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; } .coral-left { left: 12%; height: 64px; transform: rotate(-7deg); } .coral-left::after, .coral-right::after { position: absolute; bottom: 27px; width: 40px; height: 16px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; content: ""; } .coral-left::after { left: 8px; transform: rotate(38deg); transform-origin: left bottom; } .coral-right { right: 15%; height: 74px; border-color: var(--purple); transform: rotate(8deg); } .coral-right::after { right: 8px; border-color: var(--purple); transform: rotate(-42deg); transform-origin: right bottom; }
-    @media (max-width: 480px) { .page { padding-top: 55px; } .compliment-box { min-height: 245px; padding: 24px 20px; box-shadow: 7px 7px 0 rgb(6 80 104 / 42%); } .bubble-one { left: 4%; } }
-    @media (prefers-reduced-motion: reduce) { .insult { animation: none; } }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    body {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      color: var(--mob-black);
+      font-family: 'Crimson Text', serif;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .page {
+      width: min(800px, 100%);
+      position: relative;
+    }
+
+    /* Therapy office header */
+    .office-header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--mob-red);
+      font-family: 'Crimson Text', serif;
+    }
+
+    .office-header .icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .office-header h1 {
+      margin: 0;
+      font-size: 2.4em;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--mob-red);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .office-header .subtitle {
+      font-size: 0.95em;
+      color: var(--therapy-blue);
+      letter-spacing: 0.05em;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* Dr. Melfi portrait */
+    .therapist-portrait {
+      width: 100px;
+      height: 120px;
+      margin: 20px auto;
+      background: var(--office-cream);
+      border: 4px solid var(--mob-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Therapy session form */
+    .session-file {
+      background: var(--office-cream);
+      border: 3px solid var(--mob-red);
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .session-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--mob-red);
+      padding-bottom: 12px;
+    }
+
+    .session-label {
+      font-weight: 700;
+      font-size: 0.8em;
+      letter-spacing: 0.1em;
+      color: var(--mob-red);
+      margin: 0;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .session-title {
+      font-family: 'Crimson Text', serif;
+      font-size: 1.4em;
+      margin: 8px 0 0 0;
+      color: var(--mob-black);
+      font-weight: 700;
+    }
+
+    /* Therapy dialogue */
+    #therapy {
+      font-size: 1.25em;
+      line-height: 1.8;
+      min-height: 100px;
+      margin: 20px 0;
+      color: var(--mob-black);
+      text-align: center;
+      font-style: italic;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #therapy.fade {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    /* Mob file reveal */
+    .mob-file {
+      background: rgba(139, 0, 0, 0.08);
+      border: 2px dashed var(--mob-red);
+      padding: 20px;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .mob-file.show {
+      display: block;
+      animation: file-reveal 0.8s ease forwards;
+    }
+
+    @keyframes file-reveal {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .file-header {
+      font-weight: 700;
+      color: var(--mob-red);
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 0.9em;
+      letter-spacing: 0.15em;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .charges {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .charges li {
+      margin: 10px 0;
+      padding: 8px;
+      color: var(--mob-black);
+      font-size: 1em;
+      font-family: 'Courier Prime', monospace;
+      border-left: 3px solid var(--mob-red);
+      padding-left: 12px;
+    }
+
+    .charges li::before {
+      content: "• ";
+      color: var(--mob-red);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    /* Whacking stamp */
+    .stamp {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-20deg) scale(0);
+      font-family: 'Courier Prime', monospace;
+      font-weight: 700;
+      font-size: 50px;
+      color: var(--mob-red);
+      text-shadow: 0 0 15px rgba(139, 0, 0, 0.6);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 100;
+      letter-spacing: 2px;
+      border: 3px solid var(--mob-red);
+      padding: 8px 16px;
+    }
+
+    .stamp.animate {
+      animation: stamp-slam 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes stamp-slam {
+      0% {
+        transform: translate(-50%, -50%) rotate(-20deg) scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(-20deg) scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(-20deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Verdict */
+    .verdict {
+      text-align: center;
+      font-size: 1.15em;
+      margin: 20px 0;
+      min-height: 50px;
+      display: none;
+      font-weight: 700;
+      color: var(--mob-red);
+    }
+
+    .verdict.show {
+      display: block;
+      animation: verdict-flash 0.8s ease forwards;
+    }
+
+    @keyframes verdict-flash {
+      0% { opacity: 0; }
+      30% { opacity: 1; text-shadow: 0 0 10px rgba(139, 0, 0, 0.8); }
+      100% { opacity: 1; text-shadow: none; }
+    }
+
+    /* Buttons */
+    .button-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: 2px solid var(--mob-red);
+      background: var(--mob-gold);
+      color: var(--mob-black);
+      cursor: pointer;
+      font-family: 'Crimson Text', serif;
+      font-weight: 700;
+      font-size: 1em;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button:hover:not(:disabled) {
+      background: #e6c946;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Appeal game */
+    .appeal-section {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(139, 0, 0, 0.05);
+      border: 2px solid var(--mob-gold);
+    }
+
+    .appeal-section.show {
+      display: block;
+    }
+
+    .appeal-prompt {
+      font-weight: 700;
+      color: var(--mob-black);
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 1.05em;
+    }
+
+    .attempt-counter {
+      text-align: center;
+      font-size: 0.95em;
+      color: var(--mob-black);
+      margin-bottom: 12px;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .guess-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .guess-result {
+      text-align: center;
+      min-height: 20px;
+      font-weight: 700;
+      margin-top: 10px;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .guess-result.correct {
+      color: #00aa00;
+    }
+
+    .guess-result.incorrect {
+      color: var(--mob-red);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .stamp,
+      #therapy,
+      .mob-file,
+      .verdict {
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .session-file {
+        padding: 20px;
+      }
+
+      .office-header h1 {
+        font-size: 1.8em;
+      }
+
+      #therapy {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
-  <main class="page">
-    <span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span>
-    <section class="content" aria-labelledby="title">
-      <p class="eyebrow">A most benevolent underwater oracle</p>
-      <h1 id="title">The Jolly<br>Jellyfish</h1>
-      <p class="subtitle">Come hither, fair voyager. Receive a praise most radiant from the briny deep.</p>
-      <div class="compliment-box" aria-live="polite" aria-atomic="true"><p id="output">Thou hast the rare gift of making ordinary effort seem almost impressive.<span class="signature">A compliment, surely</span></p></div>
-      <button type="button" onclick="compliment()">Reveal the companion compliment</button>
-    </section>
-    <div class="seafloor" aria-hidden="true"><span class="coral coral-left"></span><span class="coral coral-right"></span></div>
-  </main>
-  <script>
-    const complimentPairs = [
-      { first: "Thou hast the rare gift of making ordinary effort seem almost impressive.", second: "Indeed, even thy smallest triumph arrives with the fanfare of a royal procession." },
-      { first: "By my troth, thy patience is remarkable, considering how often it must be tested.", second: "Such calm is a rare treasure, though thy timing doth keep the kingdom guessing." },
-      { first: "Thy ideas do sparkle, albeit sometimes like a lantern seeking its wick.", second: "Yet somehow thy wandering light still illuminates a path worth following." },
-      { first: "No soul could mistake thee for dull; thy confusion hath a certain pageantry.", second: "Every bewildered pause becomes a grand performance in thy capable hands." },
-      { first: "Thou art proof that persistence may, on occasion, outwit preparation.", second: "And what a glorious victory it is whenever thy determination finds the finish line." },
-      { first: "Thy confidence strides bravely where certainty dare not follow.", second: "It is a bold expedition, and somehow thou makest the unknown look inviting." },
-      { first: "Fair friend, thou makest every small triumph feel like a royal procession.", second: "Even thy modest victories deserve trumpets, banners, and at least one tiny parade." },
-      { first: "Thy presence is memorable; even silence grows more interesting beside thee.", second: "The room may be quiet, but never once could it be accused of being dull." },
-      { first: "Thou hast a talent for finding the scenic route to an obvious conclusion.", second: "Still, thy journey is so entertaining that the destination can scarcely complain." },
-      { first: "Marry, thy ambition is vast enough to hide the details from sight.", second: "But thy grand designs possess enough sparkle to make the details feel optimistic." }
-    ];
-    const output = document.getElementById("output");
-    const button = document.querySelector("button");
-    let pairIndex = 0;
-    let phase = "first";
 
-    function renderFirst() {
-      const pair = complimentPairs[pairIndex];
-      output.innerHTML = `${pair.first}<span class="signature">A compliment, surely</span>`;
-    }
+<div class="page">
+  <div class="office-header">
+    <div class="icon">🦆</div>
+    <h1>THERAPY SESSION</h1>
+    <div class="subtitle">Dr. Melfi's Office — New Jersey</div>
+  </div>
 
-    function compliment() {
-      if (phase === "insult") {
-        pairIndex = (pairIndex + 1) % complimentPairs.length;
-        phase = "first";
-        renderFirst();
-        button.textContent = "Reveal the companion compliment";
-        return;
+  <div class="therapist-portrait">👩‍⚕️</div>
+
+  <div class="session-file" id="file">
+    <div class="session-header">
+      <p class="session-label">CONFIDENTIAL — PATIENT FILE</p>
+      <p class="session-title">Weekly Session Notes</p>
+    </div>
+
+    <div id="therapy">Awaiting Dr. Melfi's assessment…</div>
+
+    <div class="stamp" id="stamp">WHACKED</div>
+
+    <div class="mob-file" id="mobFile">
+      <div class="file-header">🔒 COSA NOSTRA INTELLIGENCE 🔒</div>
+      <ul class="charges" id="chargesList"></ul>
+    </div>
+
+    <div class="verdict" id="verdict">
+      <div>You're marked. Wear cement shoes.</div>
+      <div style="font-size: 0.85em; margin-top: 8px;">Tony will be in touch.</div>
+    </div>
+
+    <div class="appeal-section" id="appealSection">
+      <div class="appeal-prompt">You get ONE chance to guess if Tony's next "compliment" is genuine or mob psychology.</div>
+      <div class="attempt-counter">Lives remaining: <span id="attempts">3</span></div>
+      <div class="guess-buttons">
+        <button onclick="guessGenuine()">GENUINE</button>
+        <button onclick="guessPsych()">MOB PSYCH</button>
+      </div>
+      <div class="guess-result" id="guessResult"></div>
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button id="mainBtn" onclick="requestSession()">START THERAPY SESSION</button>
+    <button id="nextBtn" onclick="nextSession()" style="display:none;">NEXT SESSION</button>
+  </div>
+</div>
+
+<script>
+  const sessions = [
+    { dialogue: "You know, you've really been putting in the work. Tony's actually noticed.", genuine: true },
+    { dialogue: "Your anxiety attacks? We're making real progress there, friend.", genuine: true },
+    { dialogue: "Let me be honest with you — you're handling things better than most guys I know.", genuine: false }, // Mob psych
+    { dialogue: "The family thinks you're solid. You're a good earner.", genuine: false }, // Mob psych
+    { dialogue: "You've got potential, kid. Real potential.", genuine: true },
+    { dialogue: "I appreciate how you show up each week. That takes guts.", genuine: false }, // Mob double talk
+    { dialogue: "You're being very brave about your mother issues.", genuine: true },
+    { dialogue: "Between you and me, you're one of the smarter ones we work with.", genuine: false }, // Mob psych
+  ];
+
+  const crimes = [
+    "Talked too much during sit-down with Paulie (loose lips)",
+    "Showed weakness about your feelings (not made of stone)",
+    "Refused to whack someone (integrity issues)",
+    "Drove a Toyota instead of American (un-patriotic)",
+    "Asked too many questions about the business (nosy)",
+    "Wore a wire... just kidding, we checked (paranoia)",
+    "Ratted to Dr. Melfi (therapist thing, they know)",
+    "Had panic attacks instead of drinking it away (soft)",
+    "Made eye contact with Tony's goomar (disrespect)",
+    "Laughed when Christopher wasn't funny (balls required)",
+    "Said you wanted to go to Vegas (dreamer)",
+    "Couldn't remember a simple errand (senility detected)",
+  ];
+
+  let sessionIndex = 0;
+  let phase = "initial";
+  let appealAttempts = 3;
+  let currentSession = null;
+  let gameActive = false;
+
+  const mainBtn = document.getElementById("mainBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const therapyEl = document.getElementById("therapy");
+  const stamp = document.getElementById("stamp");
+  const mobFile = document.getElementById("mobFile");
+  const chargesList = document.getElementById("chargesList");
+  const verdict = document.getElementById("verdict");
+  const appealSection = document.getElementById("appealSection");
+  const attempts = document.getElementById("attempts");
+  const guessResult = document.getElementById("guessResult");
+
+  function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+  }
+
+  function requestSession() {
+    if (phase !== "initial") return;
+    phase = "evaluating";
+    mainBtn.disabled = true;
+    mainBtn.textContent = "Session in progress…";
+
+    currentSession = sessions[sessionIndex % sessions.length];
+    therapyEl.textContent = `"${currentSession.dialogue}"`;
+    therapyEl.classList.remove("fade");
+
+    setTimeout(() => {
+      stamp.classList.add("animate");
+      setTimeout(() => {
+        therapyEl.classList.add("fade");
+        setTimeout(() => {
+          chargesList.innerHTML = "";
+          const charges = shuffle(crimes).slice(0, 3 + Math.floor(Math.random() * 2));
+          charges.forEach(charge => {
+            const li = document.createElement("li");
+            li.textContent = charge;
+            chargesList.appendChild(li);
+          });
+          mobFile.classList.add("show");
+          setTimeout(() => {
+            verdict.classList.add("show");
+            phase = "revealed";
+            mainBtn.disabled = false;
+            mainBtn.style.display = "none";
+            nextBtn.style.display = "inline-block";
+            nextBtn.textContent = "NEXT SESSION";
+            appealSection.classList.add("show");
+            gameActive = true;
+            appealAttempts = 3;
+            attempts.textContent = "3";
+            guessResult.textContent = "";
+            guessResult.className = "guess-result";
+          }, 500);
+        }, 400);
+      }, 600);
+    }, 500);
+  }
+
+  function guessGenuine() {
+    if (!gameActive || appealAttempts <= 0) return;
+    const isCorrect = currentSession.genuine;
+    guessResult.classList.remove("correct", "incorrect");
+    if (isCorrect) {
+      guessResult.textContent = "✓ CORRECT! That was real therapy.";
+      guessResult.classList.add("correct");
+      gameActive = false;
+    } else {
+      appealAttempts--;
+      attempts.textContent = String(appealAttempts);
+      if (appealAttempts > 0) {
+        guessResult.textContent = "✗ Wrong. That was mob psychology.";
+        guessResult.classList.add("incorrect");
+      } else {
+        guessResult.textContent = "✗ Failed. You're a dead man.";
+        guessResult.classList.add("incorrect");
+        gameActive = false;
       }
-      if (phase !== "first") return;
-
-      const pair = complimentPairs[pairIndex];
-      phase = "second";
-      output.innerHTML = `<span class="compliment-line">${pair.first}</span><span class="compliment-line">${pair.second}</span><span class="signature">A compliment, surely</span>`;
-      button.disabled = true;
-      button.textContent = "The tide is turning…";
-
-      window.setTimeout(() => {
-        output.classList.add("fade-out");
-        window.setTimeout(() => {
-          output.innerHTML = `<span class="insult">… I'm joking.<br>You don't deserve any compliments,<br>I'm better than you.</span>`;
-          output.classList.remove("fade-out");
-          phase = "insult";
-          button.disabled = false;
-          button.textContent = "Try another compliment";
-        }, 500);
-      }, 1800);
     }
-  </script>
+  }
+
+  function guessPsych() {
+    if (!gameActive || appealAttempts <= 0) return;
+    const isCorrect = !currentSession.genuine;
+    guessResult.classList.remove("correct", "incorrect");
+    if (isCorrect) {
+      guessResult.textContent = "✓ CORRECT! That was mob double-talk.";
+      guessResult.classList.add("correct");
+      gameActive = false;
+    } else {
+      appealAttempts--;
+      attempts.textContent = String(appealAttempts);
+      if (appealAttempts > 0) {
+        guessResult.textContent = "✗ Wrong. That was genuine.";
+        guessResult.classList.add("incorrect");
+      } else {
+        guessResult.textContent = "✗ Failed. You're a dead man.";
+        guessResult.classList.add("incorrect");
+        gameActive = false;
+      }
+    }
+  }
+
+  function nextSession() {
+    sessionIndex++;
+    phase = "initial";
+    stamp.classList.remove("animate");
+    therapyEl.classList.remove("fade");
+    mobFile.classList.remove("show");
+    verdict.classList.remove("show");
+    appealSection.classList.remove("show");
+    chargesList.innerHTML = "";
+    guessResult.textContent = "";
+    guessResult.className = "guess-result";
+    mainBtn.style.display = "inline-block";
+    nextBtn.style.display = "none";
+    mainBtn.disabled = false;
+    mainBtn.textContent = "START THERAPY SESSION";
+    requestSession();
+  }
+</script>
+
 </body>
 </html>
