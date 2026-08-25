@@ -1,6 +1,13 @@
 # Team 6: Random Compliment Generator
 
-Click a button, get a random compliment.
+A browser-based compliment generator with a cheerful underwater-cartoon presentation.
 
-## Status
-Just started — nothing built yet. Right now the button does nothing.
+## Use
+
+Open `index.html` in a modern browser, then select **Bestow another sweet praise** to receive a new compliment.
+
+## Details
+
+- Displays varied Shakespearean-style compliments.
+- Avoids repeating the immediately previous message.
+- Uses a responsive, ocean-inspired single-page interface with no external dependencies or API configuration required.
