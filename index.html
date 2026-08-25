@@ -16,13 +16,21 @@
     h1 { margin: 0; color: var(--sand); font-family: "Trebuchet MS", sans-serif; font-size: clamp(2.35rem, 8vw, 4.8rem); font-weight: 900; letter-spacing: 0; line-height: .9; text-shadow: 3px 4px 0 var(--coral), 6px 7px 0 rgb(21 67 88 / 28%); }
     .subtitle { max-width: 510px; margin: 22px auto 28px; color: var(--white); font-size: clamp(1.1rem, 3vw, 1.4rem); font-style: italic; line-height: 1.4; }
     .compliment-box { min-height: 216px; display: grid; place-items: center; padding: 30px; border: 5px solid var(--ink); border-radius: 8px; background: var(--white); box-shadow: 10px 10px 0 rgb(6 80 104 / 42%); }
-    #output { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: bold; line-height: 1.35; }
+    #output { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: bold; line-height: 1.35; transition: opacity 450ms ease, transform 450ms ease; }
+    #output.fade-out { opacity: 0; transform: translateY(10px) scale(.97); }
+    .compliment-line { display: block; margin: 0 0 16px; }
+    .insult { display: block; color: #ff172f; font-family: "Trebuchet MS", sans-serif; font-size: clamp(1.45rem, 5vw, 2.15rem); line-height: 1.15; text-shadow: 0 0 10px rgb(255 23 47 / 75%); text-transform: uppercase; animation: red-alert 550ms steps(2, end) infinite; }
+    @keyframes red-alert {
+      0%, 49% { color: #ff172f; text-shadow: 0 0 14px rgb(255 23 47 / 90%); }
+      50%, 100% { color: #7b0010; text-shadow: none; }
+    }
     .signature { display: block; margin-top: 14px; color: var(--purple); font-family: "Trebuchet MS", sans-serif; font-size: .78rem; font-style: normal; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
     button { width: min(390px, 100%); margin-top: 28px; padding: 17px 22px; border: 4px solid var(--ink); border-radius: 5px; color: var(--ink); cursor: pointer; font-family: "Trebuchet MS", sans-serif; font-size: 1.15rem; font-weight: 900; letter-spacing: .3px; background: var(--sand); box-shadow: 6px 6px 0 var(--coral); transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease; }
     button:hover { background: #ffe588; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--coral); } button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--coral); } button:focus-visible { outline: 4px solid var(--white); outline-offset: 4px; }
     .seafloor { position: absolute; right: 0; bottom: 0; left: 0; height: 105px; background: var(--sand); clip-path: polygon(0 27%, 7% 36%, 15% 20%, 24% 39%, 34% 17%, 43% 34%, 55% 16%, 67% 36%, 76% 20%, 86% 35%, 100% 14%, 100% 100%, 0 100%); }
     .coral { position: absolute; bottom: 13px; width: 18px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; } .coral-left { left: 12%; height: 64px; transform: rotate(-7deg); } .coral-left::after, .coral-right::after { position: absolute; bottom: 27px; width: 40px; height: 16px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; content: ""; } .coral-left::after { left: 8px; transform: rotate(38deg); transform-origin: left bottom; } .coral-right { right: 15%; height: 74px; border-color: var(--purple); transform: rotate(8deg); } .coral-right::after { right: 8px; border-color: var(--purple); transform: rotate(-42deg); transform-origin: right bottom; }
     @media (max-width: 480px) { .page { padding-top: 55px; } .compliment-box { min-height: 245px; padding: 24px 20px; box-shadow: 7px 7px 0 rgb(6 80 104 / 42%); } .bubble-one { left: 4%; } }
+    @media (prefers-reduced-motion: reduce) { .insult { animation: none; } }
   </style>
 </head>
 <body>
@@ -33,29 +41,59 @@
       <h1 id="title">The Jolly<br>Jellyfish</h1>
       <p class="subtitle">Come hither, fair voyager. Receive a praise most radiant from the briny deep.</p>
       <div class="compliment-box" aria-live="polite" aria-atomic="true"><p id="output">Thou hast the rare gift of making ordinary effort seem almost impressive.<span class="signature">A compliment, surely</span></p></div>
-      <button type="button" onclick="compliment()">Bestow another sweet praise</button>
+      <button type="button" onclick="compliment()">Reveal the companion compliment</button>
     </section>
     <div class="seafloor" aria-hidden="true"><span class="coral coral-left"></span><span class="coral coral-right"></span></div>
   </main>
   <script>
-    const compliments = [
-      "Thou hast the rare gift of making ordinary effort seem almost impressive.",
-      "By my troth, thy patience is remarkable, considering how often it must be tested.",
-      "Thy ideas do sparkle, albeit sometimes like a lantern seeking its wick.",
-      "No soul could mistake thee for dull; thy confusion hath a certain pageantry.",
-      "Thou art proof that persistence may, on occasion, outwit preparation.",
-      "Thy confidence strides bravely where certainty dare not follow.",
-      "Fair friend, thou makest every small triumph feel like a royal procession.",
-      "Thy presence is memorable; even silence grows more interesting beside thee.",
-      "Thou hast a talent for finding the scenic route to an obvious conclusion.",
-      "Marry, thy ambition is vast enough to hide the details from sight."
+    const complimentPairs = [
+      { first: "Thou hast the rare gift of making ordinary effort seem almost impressive.", second: "Indeed, even thy smallest triumph arrives with the fanfare of a royal procession." },
+      { first: "By my troth, thy patience is remarkable, considering how often it must be tested.", second: "Such calm is a rare treasure, though thy timing doth keep the kingdom guessing." },
+      { first: "Thy ideas do sparkle, albeit sometimes like a lantern seeking its wick.", second: "Yet somehow thy wandering light still illuminates a path worth following." },
+      { first: "No soul could mistake thee for dull; thy confusion hath a certain pageantry.", second: "Every bewildered pause becomes a grand performance in thy capable hands." },
+      { first: "Thou art proof that persistence may, on occasion, outwit preparation.", second: "And what a glorious victory it is whenever thy determination finds the finish line." },
+      { first: "Thy confidence strides bravely where certainty dare not follow.", second: "It is a bold expedition, and somehow thou makest the unknown look inviting." },
+      { first: "Fair friend, thou makest every small triumph feel like a royal procession.", second: "Even thy modest victories deserve trumpets, banners, and at least one tiny parade." },
+      { first: "Thy presence is memorable; even silence grows more interesting beside thee.", second: "The room may be quiet, but never once could it be accused of being dull." },
+      { first: "Thou hast a talent for finding the scenic route to an obvious conclusion.", second: "Still, thy journey is so entertaining that the destination can scarcely complain." },
+      { first: "Marry, thy ambition is vast enough to hide the details from sight.", second: "But thy grand designs possess enough sparkle to make the details feel optimistic." }
     ];
-    let lastIndex = 0;
+    const output = document.getElementById("output");
+    const button = document.querySelector("button");
+    let pairIndex = 0;
+    let phase = "first";
+
+    function renderFirst() {
+      const pair = complimentPairs[pairIndex];
+      output.innerHTML = `${pair.first}<span class="signature">A compliment, surely</span>`;
+    }
+
     function compliment() {
-      let nextIndex = Math.floor(Math.random() * compliments.length);
-      while (compliments.length > 1 && nextIndex === lastIndex) nextIndex = Math.floor(Math.random() * compliments.length);
-      lastIndex = nextIndex;
-      document.getElementById("output").innerHTML = `${compliments[nextIndex]}<span class="signature">A compliment, surely</span>`;
+      if (phase === "insult") {
+        pairIndex = (pairIndex + 1) % complimentPairs.length;
+        phase = "first";
+        renderFirst();
+        button.textContent = "Reveal the companion compliment";
+        return;
+      }
+      if (phase !== "first") return;
+
+      const pair = complimentPairs[pairIndex];
+      phase = "second";
+      output.innerHTML = `<span class="compliment-line">${pair.first}</span><span class="compliment-line">${pair.second}</span><span class="signature">A compliment, surely</span>`;
+      button.disabled = true;
+      button.textContent = "The tide is turning…";
+
+      window.setTimeout(() => {
+        output.classList.add("fade-out");
+        window.setTimeout(() => {
+          output.innerHTML = `<span class="insult">… I'm joking.<br>You don't deserve any compliments,<br>I'm better than you.</span>`;
+          output.classList.remove("fade-out");
+          phase = "insult";
+          button.disabled = false;
+          button.textContent = "Try another compliment";
+        }, 500);
+      }, 1800);
     }
   </script>
 </body>
