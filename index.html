@@ -1,21 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Random Compliment Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Jolly Jellyfish Complimentarium</title>
   <style>
-    body { font-family: sans-serif; max-width: 500px; margin: 60px auto; text-align: center; }
-    button { font-size: 1.2rem; padding: 8px 16px; }
+    :root { --sea: #17a9c6; --deep-sea: #057698; --sand: #ffd969; --coral: #f66e66; --ink: #173b52; --purple: #8e5aa6; --white: #fffdf1; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; overflow-x: hidden; color: var(--ink); font-family: Georgia, "Times New Roman", serif; background: radial-gradient(circle at 20% 20%, rgb(255 255 255 / 35%) 0 4px, transparent 5px), radial-gradient(circle at 74% 34%, rgb(255 255 255 / 28%) 0 7px, transparent 8px), linear-gradient(180deg, #42c7da 0%, var(--sea) 48%, var(--deep-sea) 100%); background-size: 75px 75px, 130px 130px, auto; }
+    .page { position: relative; display: grid; min-height: 100vh; place-items: center; padding: 32px 20px 130px; }
+    .bubble { position: absolute; border: 3px solid rgb(255 255 255 / 66%); border-radius: 50%; opacity: .8; pointer-events: none; }
+    .bubble-one { width: 54px; height: 54px; top: 11%; left: 9%; } .bubble-two { width: 29px; height: 29px; top: 19%; left: 15%; } .bubble-three { width: 72px; height: 72px; right: 8%; bottom: 18%; }
+    .content { width: min(700px, 100%); text-align: center; }
+    .eyebrow { margin: 0 0 10px; color: var(--white); font-family: "Trebuchet MS", sans-serif; font-size: .8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    h1 { margin: 0; color: var(--sand); font-family: "Trebuchet MS", sans-serif; font-size: clamp(2.35rem, 8vw, 4.8rem); font-weight: 900; letter-spacing: 0; line-height: .9; text-shadow: 3px 4px 0 var(--coral), 6px 7px 0 rgb(21 67 88 / 28%); }
+    .subtitle { max-width: 510px; margin: 22px auto 28px; color: var(--white); font-size: clamp(1.1rem, 3vw, 1.4rem); font-style: italic; line-height: 1.4; }
+    .compliment-box { min-height: 216px; display: grid; place-items: center; padding: 30px; border: 5px solid var(--ink); border-radius: 8px; background: var(--white); box-shadow: 10px 10px 0 rgb(6 80 104 / 42%); }
+    #output { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: bold; line-height: 1.35; }
+    .signature { display: block; margin-top: 14px; color: var(--purple); font-family: "Trebuchet MS", sans-serif; font-size: .78rem; font-style: normal; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+    button { width: min(390px, 100%); margin-top: 28px; padding: 17px 22px; border: 4px solid var(--ink); border-radius: 5px; color: var(--ink); cursor: pointer; font-family: "Trebuchet MS", sans-serif; font-size: 1.15rem; font-weight: 900; letter-spacing: .3px; background: var(--sand); box-shadow: 6px 6px 0 var(--coral); transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease; }
+    button:hover { background: #ffe588; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--coral); } button:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--coral); } button:focus-visible { outline: 4px solid var(--white); outline-offset: 4px; }
+    .seafloor { position: absolute; right: 0; bottom: 0; left: 0; height: 105px; background: var(--sand); clip-path: polygon(0 27%, 7% 36%, 15% 20%, 24% 39%, 34% 17%, 43% 34%, 55% 16%, 67% 36%, 76% 20%, 86% 35%, 100% 14%, 100% 100%, 0 100%); }
+    .coral { position: absolute; bottom: 13px; width: 18px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; } .coral-left { left: 12%; height: 64px; transform: rotate(-7deg); } .coral-left::after, .coral-right::after { position: absolute; bottom: 27px; width: 40px; height: 16px; border: 5px solid var(--coral); border-bottom: 0; border-radius: 16px 16px 0 0; content: ""; } .coral-left::after { left: 8px; transform: rotate(38deg); transform-origin: left bottom; } .coral-right { right: 15%; height: 74px; border-color: var(--purple); transform: rotate(8deg); } .coral-right::after { right: 8px; border-color: var(--purple); transform: rotate(-42deg); transform-origin: right bottom; }
+    @media (max-width: 480px) { .page { padding-top: 55px; } .compliment-box { min-height: 245px; padding: 24px 20px; box-shadow: 7px 7px 0 rgb(6 80 104 / 42%); } .bubble-one { left: 4%; } }
   </style>
 </head>
 <body>
-  <h1>Random Compliment Generator</h1>
-  <button onclick="compliment()">Give me a compliment</button>
-  <div id="output" style="margin-top: 20px; font-size: 1.3rem;"></div>
-
+  <main class="page">
+    <span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span>
+    <section class="content" aria-labelledby="title">
+      <p class="eyebrow">A most benevolent underwater oracle</p>
+      <h1 id="title">The Jolly<br>Jellyfish</h1>
+      <p class="subtitle">Come hither, fair voyager. Receive a praise most radiant from the briny deep.</p>
+      <div class="compliment-box" aria-live="polite" aria-atomic="true"><p id="output">Thou hast the rare gift of making ordinary effort seem almost impressive.<span class="signature">A compliment, surely</span></p></div>
+      <button type="button" onclick="compliment()">Bestow another sweet praise</button>
+    </section>
+    <div class="seafloor" aria-hidden="true"><span class="coral coral-left"></span><span class="coral coral-right"></span></div>
+  </main>
   <script>
+    const compliments = [
+      "Thou hast the rare gift of making ordinary effort seem almost impressive.",
+      "By my troth, thy patience is remarkable, considering how often it must be tested.",
+      "Thy ideas do sparkle, albeit sometimes like a lantern seeking its wick.",
+      "No soul could mistake thee for dull; thy confusion hath a certain pageantry.",
+      "Thou art proof that persistence may, on occasion, outwit preparation.",
+      "Thy confidence strides bravely where certainty dare not follow.",
+      "Fair friend, thou makest every small triumph feel like a royal procession.",
+      "Thy presence is memorable; even silence grows more interesting beside thee.",
+      "Thou hast a talent for finding the scenic route to an obvious conclusion.",
+      "Marry, thy ambition is vast enough to hide the details from sight."
+    ];
+    let lastIndex = 0;
     function compliment() {
-      document.getElementById('output').innerText = "Nothing here yet — build me!";
-      // Build me! Add an array of compliments and pick one at random.
+      let nextIndex = Math.floor(Math.random() * compliments.length);
+      while (compliments.length > 1 && nextIndex === lastIndex) nextIndex = Math.floor(Math.random() * compliments.length);
+      lastIndex = nextIndex;
+      document.getElementById("output").innerHTML = `${compliments[nextIndex]}<span class="signature">A compliment, surely</span>`;
     }
   </script>
 </body>
